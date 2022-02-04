@@ -1,14 +1,24 @@
 import unittest
+from tests import generate_data as gd
 from DelimiterFinder.finder import Finder
 
 
 class TestFinder(unittest.TestCase):
 
 	def test_single_delim(self):
-		pass
+		num_samples = 10
+		data = gd.gen_data(num_delims=1, num_samples=num_samples)
+		f = Finder(num_samples=num_samples)
+		for delim in data.keys():
+			self.assertEqual(delim, f.find(data[delim]))
 
 	def test_multi_delim(self):
-		pass
+		num_samples = 20
+		data = gd.gen_data(num_delims=3, num_samples=num_samples)
+		f = Finder(num_samples=num_samples)
+		for delim in data.keys():
+			print(delim)
+			self.assertEqual(delim, f.find(data[delim]))
 
 	def test_uncertain(self):
 		pass

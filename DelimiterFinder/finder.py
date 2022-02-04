@@ -6,7 +6,7 @@ from collections import Counter
 
 
 class Finder(object):
-    def __init__(self, ignore_chars=None, num_samples=5):
+    def __init__(self, ignore_chars=None):
         """
         Parameters:
         -----------
@@ -14,21 +14,17 @@ class Finder(object):
             List of non-alphanumeric characters which should
             not be considered candidate delimiters.
         
-        num_samples: int, default=5
-            Number of rows to sample for inference.
-        
         Attributes:
         -----------
         posterior: dict
             The posterior probability of each candidate delimiter.
         """
         self.ignore_chars = ignore_chars
-        self.num_samples = num_samples
 
 
     ### public methods ###
 
-    def find(self, data, is_path=False, new_line_sep="\n"):
+    def find(self, data, is_path=False, num_samples=5, new_line_sep="\n"):
         """
         Parameters:
         -----------
@@ -44,6 +40,9 @@ class Finder(object):
         is_path: bool, default='False'
             An indicator for whether the value passed to the `data`
             parameter is a file path.
+
+        num_samples: int, default=5
+            Number of rows to sample for inference.
         
         new_line_sep: str, default='\n'
             The new line separator for the rows in the data.
@@ -53,7 +52,7 @@ class Finder(object):
         delim: str
             The maximum a posteriori probability (MAP) estimate.
         """
-        data = self._format_data(data, is_path, new_line_sep)
+        data = self._format_data(data, is_path, num_samples, new_line_sep)
         header = data.pop(0)
         # create regex expression
         alphanum, end = r"[^a-zA-Z0-9", " ]+"
@@ -99,7 +98,7 @@ class Finder(object):
 
     ## private methods ##
 
-    def _format_data(self, data, is_path, new_line_sep):
+    def _format_data(self, data, is_path, num_samples, new_line_sep):
         """
         Parameters:
         -----------
@@ -116,7 +115,10 @@ class Finder(object):
             An indicator for whether the value passed to the `data`
             parameter is a file path.
 
-        new_line_sep: str, default='\n'
+        num_samples: int
+            Number of rows to sample for inference.
+
+        new_line_sep: str
             The new line separator for the rows in the data.
         
         Returns:
@@ -130,7 +132,7 @@ class Finder(object):
             # get data from path
             if is_path:
                 with open(data, 'r') as f:
-                    data = [next(f) for _ in range(self.num_samples)]
+                    data = [next(f) for _ in range(num_samples)]
             # get data from non-path string
             else:
                 # quick check to see if `is_path` should have been used
@@ -139,7 +141,7 @@ class Finder(object):
                                                               yet the `is_path` parameter was set to False. 
                                                               Set `is_path` to True for file paths.""")
 
-                data = data.split(new_line_sep, self.num_samples)
+                data = data.split(new_line_sep, num_samples)
 
-        data = data[:self.num_samples]
+        data = data[:num_samples]
         return data

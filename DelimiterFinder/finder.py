@@ -1,4 +1,6 @@
+import os
 import re
+import warnings
 from collections import Counter
 
 
@@ -22,9 +24,11 @@ class Finder(object):
         """
         self.ignore_chars = ignore_chars
         self.num_samples = num_samples
-    
-    
-    def find(self, data, new_line_sep="\n"):
+
+
+    ### public methods ###
+
+    def find(self, data, is_path=False, new_line_sep="\n"):
         """
         Parameters:
         -----------
@@ -32,6 +36,14 @@ class Finder(object):
             The input data either as a single string with
             each row separated by `new_line_sep` or a list 
             where each element is a row.
+
+            Alternatively, a path to a text file (e.g., .TXT, .CSV)
+            may be passed, in which case, the `is_path` parameter
+            should be set to "True"
+
+        is_path: bool, default='False'
+            An indicator for whether the value passed to the `data`
+            parameter is a file path.
         
         new_line_sep: str, default='\n'
             The new line separator for the rows in the data.
@@ -41,10 +53,7 @@ class Finder(object):
         delim: str
             The maximum a posteriori probability (MAP) estimate.
         """
-        # convert data into list of strings (if applicable)
-        if type(data) == str:
-            data = data.split(new_line_sep, self.num_samples)
-        data = data[:self.num_samples]
+        data = self._format_data(data, is_path, new_line_sep)
         header = data.pop(0)
         # create regex expression
         alphanum, end = r"[^a-zA-Z0-9", " ]+"
@@ -61,7 +70,6 @@ class Finder(object):
         for row in data:
             marginal_likelihood = 0
             for delim in candidates:
-
                 # initial prior is the probability of observing delimiter `m` in the header
                 if delim not in priors:
                     priors[delim] = candidates[delim]/total
@@ -87,3 +95,51 @@ class Finder(object):
         # get MAP estimate
         delim = max(self.posterior, key=self.posterior.get)
         return delim
+
+
+    ## private methods ##
+
+    def _format_data(self, data, is_path, new_line_sep):
+        """
+        Parameters:
+        -----------
+        data: str, list, path
+            The input data either as a single string with
+            each row separated by `new_line_sep` or a list 
+            where each element is a row.
+
+            Alternatively, a path to a text file (e.g., .TXT, .CSV)
+            may be passed, in which case, the `is_path` parameter
+            should be set to "True"
+
+        is_path: bool
+            An indicator for whether the value passed to the `data`
+            parameter is a file path.
+
+        new_line_sep: str, default='\n'
+            The new line separator for the rows in the data.
+        
+        Returns:
+        --------
+        data: list
+            A list of length `num_samples` where each element is a row.
+        """
+        assert type(data) == str or type(data)== list, 'data must be str or list'
+        # convert data into list of strings (if applicable)
+        if type(data) == str:
+            # get data from path
+            if is_path:
+                with open(data, 'r') as f:
+                    data = [next(f) for _ in range(self.num_samples)]
+            # get data from non-path string
+            else:
+                # quick check to see if `is_path` should have been used
+                if len(data) < 1000:
+                    if os.path.exists(data): warnings.warn("""The given string appears to be a valid file path, 
+                                                              yet the `is_path` parameter was set to False. 
+                                                              Set `is_path` to True for file paths.""")
+
+                data = data.split(new_line_sep, self.num_samples)
+
+        data = data[:self.num_samples]
+        return data

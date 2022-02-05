@@ -98,7 +98,8 @@ class Finder(object):
 
     ## private methods ##
 
-    def _format_data(self, data, is_path, num_samples, new_line_sep):
+    @staticmethod
+    def _format_data(data, is_path, num_samples, new_line_sep):
         """
         Parameters:
         -----------

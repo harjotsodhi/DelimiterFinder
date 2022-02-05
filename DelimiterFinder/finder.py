@@ -53,13 +53,13 @@ class Finder(object):
             The maximum a posteriori probability (MAP) estimate.
         """
         data = self._format_data(data, is_path, num_samples, new_line_sep)
-        header = data.pop(0)
-        # create regex expression
+        rowOne = data.pop(0)
+        # create regex expression for identifying valid delimiter characters.
         alphanum, end = r"[^a-zA-Z0-9", " ]+"
         if not self.ignore_chars: self.ignore_chars = []
-        match_chars = re.compile(alphanum+"".join(self.ignore_chars)+new_line_sep+end)
-        # match all contiguous strings of valid non-alphanumeric characters
-        matches = re.findall(match_chars, header)
+        re_pattern = re.compile(alphanum+"".join(self.ignore_chars)+new_line_sep+end)
+        # match all contiguous strings of valid non-alphanumeric characters     
+        matches = re.findall(re_pattern, rowOne)
         candidates = Counter(matches)
 
         # sequential Bayesian updating over N rows of data
@@ -69,12 +69,12 @@ class Finder(object):
         for row in data:
             marginal_likelihood = 0
             for delim in candidates:
-                # initial prior is the probability of observing delimiter `m` in the header
+                # initial prior is the probability of observing delimiter `m` in the rowOne
                 if delim not in priors:
                     priors[delim] = candidates[delim]/total
 
-                # likelihood is the proportion of number of columns b/w the header and row `n`
-                p0, pn = len(header.split(delim)), len(row.split(delim))
+                # likelihood is the proportion of number of columns b/w the rowOne and row `n`
+                p0, pn = len(rowOne.split(delim)), len(row.split(delim))
                 if p0 < pn:
                     likelihood = p0 / pn
                 else:

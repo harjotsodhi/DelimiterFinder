@@ -8,17 +8,18 @@ class TestFinder(unittest.TestCase):
 	def test_single_delim(self):
 		num_samples = 10
 		data = gd.gen_data(num_delims=1, num_samples=num_samples)
-		f = Finder(num_samples=num_samples)
+		f = Finder()
 		for delim in data.keys():
-			self.assertEqual(delim, f.find(data[delim]))
+			self.assertEqual(delim, f.find(data[delim], num_samples=num_samples))
 
 	def test_multi_delim(self):
-		num_samples = 20
-		data = gd.gen_data(num_delims=3, num_samples=num_samples)
-		f = Finder(num_samples=num_samples)
-		for delim in data.keys():
-			print(delim)
-			self.assertEqual(delim, f.find(data[delim]))
+		num_samples = 10
+		num_delims = [3,4,5]
+		for n in num_delims:
+			data = gd.gen_data(num_delims=n, num_samples=num_samples)
+			f = Finder()
+			for delim in data.keys():
+				self.assertEqual(delim, f.find(data[delim], num_samples=num_samples))
 
 	def test_uncertain(self):
 		pass

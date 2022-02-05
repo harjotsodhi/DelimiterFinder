@@ -4,11 +4,8 @@ import string
 random.seed(42)
 delim_chars = '!#$%&\\()*+,-./:;<=>?@[]^_`{}~\t'
 
-
-
 def gen_data(num_delims, num_samples):
 	cases = {}
-
 	# for single or multi char delimiters
 	if num_delims > 1:
 		# form multi char delimiters based on the delim_chars list
@@ -19,7 +16,7 @@ def gen_data(num_delims, num_samples):
 
 	for d in candidates:
 	    data = []
-	    num_cols,num_rows = random.randint(2,50), num_samples
+	    num_cols,num_rows = random.randint(3,50), num_samples
 	    charlist = string.ascii_letters+delim_chars+string.digits
 	    for i in range(num_rows):
 	        row = []
@@ -32,7 +29,7 @@ def gen_data(num_delims, num_samples):
 	            if b == '0':
 	                row.append(d)
 	            else:
-	                num_chars = random.randint(0,50)
+	                num_chars = random.randint(1,50)
 	                chars = random.choices(charlist, k=num_chars)
 	                # remove current delim from generated element
 	                chars = ''.join(chars).replace(d, '')+d

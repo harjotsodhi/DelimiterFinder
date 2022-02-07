@@ -22,10 +22,11 @@ class Finder(object):
         bayes_factor: float
             Evidence in favor of the most likely delimiter (MAP)
             relative to the second most likely delimiter.
-
-                1) 1 < bayes_factor < 3: weak evidence.
-                2) 3 < bayes_factor < 10: substantial evidence.
-                3) bayes_factor > 10: strong evidence (but the higher the better).
+                
+                1) bayes_factor == 1: no evidence.
+                2) 1 < bayes_factor < 3: weak evidence.
+                3) 3 < bayes_factor < 10: substantial evidence.
+                4) bayes_factor > 10: strong evidence.
 
                 Source: Jeffreys, Harold (1998) [1961]. The Theory of Probability (3rd ed.). Oxford, England. p. 432.
         """
@@ -111,8 +112,11 @@ class Finder(object):
             elif self.posterior[delim] > pr0:
                 h0,pr0 = delim,self.posterior[delim]
 
-        # calculate the Bayes factor
-        self.bayes_factor = pr1/pr0
+        # calculate the Bayes factor (handle case of only one candidate delimiter)
+        try:
+            self.bayes_factor = pr1/pr0
+        except ZeroDivisionError:
+            self.bayes_factor = float('inf')
 
         # display warning if the calculated Bayes factor for the MAP is less than 3
         if self.bayes_factor < 3:

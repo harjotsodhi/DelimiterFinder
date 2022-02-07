@@ -19,12 +19,13 @@ class Finder(object):
         posterior: dict
             The posterior probability of each candidate delimiter.
         """
+        warnings.simplefilter("always")
         self.ignore_chars = ignore_chars
 
 
     ### public methods ###
 
-    def find(self, data, is_path=False, num_samples=5, new_line_sep="\n"):
+    def find(self, data, is_path=False, num_samples=20, new_line_sep="\n"):
         """
         Parameters:
         -----------
@@ -41,7 +42,7 @@ class Finder(object):
             An indicator for whether the value passed to the `data`
             parameter is a file path.
 
-        num_samples: int, default=5
+        num_samples: int, default=20
             Number of rows to sample for inference.
         
         new_line_sep: str, default='\n'
@@ -87,12 +88,29 @@ class Finder(object):
                 # we only need the marginal likelihood w.r.t the last row of data
                 marginal_likelihood += self.posterior[delim]
 
+        # keep track of the two hypotheses: h1 (MAP) and h0 (next "most likely")
+        h0, pr0 = "", 0
+        h1, pr1 = "", 0
         # normalize the posterior by dividing by the marginal likelihood
         for delim in self.posterior.keys():
             self.posterior[delim] /= marginal_likelihood
+            # update h1 and h0 if a higher posterior probability is found 
+            if self.posterior[delim] > pr1:
+                h0,pr0 = h1,pr1
+                h1,pr1 = delim,self.posterior[delim]
+            elif self.posterior[delim] > pr0:
+                h0,pr0 = delim,self.posterior[delim]
+
+        # calculate the Bayes factor
+        self.bayes_factor = pr1/pr0
+
+        # display warning if the calculated Bayes factor for the MAP is less than 3
+        if self.bayes_factor < 3:
+            warnings.warn("Evidence in favor of the most likely delimiter is weak (Bayes factor = {0:.2f}). Try increasing the num_samples or adding characters to the ignore_chars list in order to obtain more conclusive results.".format(self.bayes_factor), 
+                          stacklevel=2)
         
         # get MAP estimate
-        delim = max(self.posterior, key=self.posterior.get)
+        delim = h1
         return delim
 
 
@@ -138,9 +156,7 @@ class Finder(object):
             else:
                 # quick check to see if `is_path` should have been used
                 if len(data) < 1000:
-                    if os.path.exists(data): warnings.warn("""The given string appears to be a valid file path, 
-                                                              yet the `is_path` parameter was set to False. 
-                                                              Set `is_path` to True for file paths.""")
+                    if os.path.exists(data): warnings.warn("The given string appears to be a valid file path, yet the `is_path` parameter was set to False. Set `is_path` to True for file paths.")
 
                 data = data.split(new_line_sep, num_samples)
 

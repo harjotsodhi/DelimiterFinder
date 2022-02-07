@@ -4,7 +4,7 @@ import string
 random.seed(42)
 delim_chars = '!#$%&\\()*+,-./:;<=>?@[]^_`{}~\t'
 
-def gen_data(num_delims, num_samples):
+def gen_data(num_delims, num_samples=20):
 	cases = {}
 	# for single or multi char delimiters
 	if num_delims > 1:

@@ -1,4 +1,5 @@
 import unittest
+import warnings
 from tests import generate_data as gd
 from DelimiterFinder.finder import Finder
 
@@ -6,23 +7,26 @@ from DelimiterFinder.finder import Finder
 class TestFinder(unittest.TestCase):
 
 	def test_single_delim(self):
-		num_samples = 10
-		data = gd.gen_data(num_delims=1, num_samples=num_samples)
+		data = gd.gen_data(num_delims=1)
 		f = Finder()
 		for delim in data.keys():
-			self.assertEqual(delim, f.find(data[delim], num_samples=num_samples))
+			# test each case
+			self.assertEqual(delim, f.find(data[delim]))
 
 	def test_multi_delim(self):
-		num_samples = 10
-		num_delims = [3,4,5]
-		for n in num_delims:
-			data = gd.gen_data(num_delims=n, num_samples=num_samples)
-			f = Finder()
+		f = Finder()
+		for n in [2,3,4,5,6,7]:
+			# test each delimiter length suite of cases
+			data = gd.gen_data(num_delims=n)
 			for delim in data.keys():
-				self.assertEqual(delim, f.find(data[delim], num_samples=num_samples))
+				# test each case
+				self.assertEqual(delim, f.find(data[delim]))
 
 	def test_uncertain(self):
-		pass
+		s = "col1,col_2,col_3\ncol1,col_2,col_3\ncol1,col_2,col_3"
+		f = Finder()
+		with self.assertWarns(Warning):
+			f.find(s)
 
 	def test_posterior(self):
 		pass

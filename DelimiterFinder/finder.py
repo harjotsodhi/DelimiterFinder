@@ -27,6 +27,7 @@ class Finder(object):
                 2) 1 < bayes_factor < 3: weak evidence.
                 3) 3 < bayes_factor < 10: substantial evidence.
                 4) bayes_factor > 10: strong evidence.
+                5) bayes_factor < 1: not possible in this hypothesis test.
 
                 Source: Jeffreys, Harold (1998) [1961]. The Theory of Probability (3rd ed.). Oxford, England. p. 432.
         """
@@ -112,7 +113,7 @@ class Finder(object):
             elif self.posterior[delim] > pr0:
                 h0,pr0 = delim,self.posterior[delim]
 
-        # calculate the Bayes factor (handle case of only one candidate delimiter)
+        # calculate the Bayes factor
         try:
             self.bayes_factor = pr1/pr0
         except ZeroDivisionError:

@@ -18,6 +18,16 @@ class Finder(object):
         -----------
         posterior: dict
             The posterior probability of each candidate delimiter.
+
+        bayes_factor: float
+            Evidence in favor of the most likely delimiter (MAP)
+            relative to the second most likely delimiter.
+
+                1) 1 < bayes_factor < 3: weak evidence.
+                2) 3 < bayes_factor < 10: substantial evidence.
+                3) bayes_factor > 10: strong evidence (but the higher the better).
+
+                Source: Jeffreys, Harold (1998) [1961]. The Theory of Probability (3rd ed.). Oxford, England. p. 432.
         """
         warnings.simplefilter("always")
         self.ignore_chars = ignore_chars

@@ -73,7 +73,10 @@ class TestFinder(unittest.TestCase):
 			f.find("tests/does_not_exist.txt", is_path=True)
 
 	def test_ignore_chars(self):
-		pass
+		s = "col1,col_2,col_3\ncol1,col_2,col_3\ncol1,col_2,col_3"
+		f = Finder(ignore_chars=["_"])
+		f.find(s)
+		self.assertNotEqual(1., f.bayes_factor)
 
 	def test_ispath(self):
 		pass

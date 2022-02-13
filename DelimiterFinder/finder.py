@@ -160,7 +160,9 @@ class Finder(object):
         data: list
             A list of length `num_samples` where each element is a row.
         """
-        assert type(data) == str or type(data)== list, 'data must be str or list'
+        if type(data) != str and type(data) != list:
+            raise TypeError('data must be str or list')
+
         # convert data into list of strings (if applicable)
         if type(data) == str:
             # get data from path

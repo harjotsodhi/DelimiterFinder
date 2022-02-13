@@ -54,7 +54,12 @@ class TestFinder(unittest.TestCase):
 		pass
 
 	def test_read_list(self):
-		pass
+		s = ["col1,col2,col3","a,b,c","d,e,f"]
+		f = Finder()
+		f.find(s)
+		s = {"col1,col2,col3","a,b,c","d,e,f"}
+		with self.assertRaises(TypeError):
+			f.find(s)
 
 	def test_read_path(self):
 		pass

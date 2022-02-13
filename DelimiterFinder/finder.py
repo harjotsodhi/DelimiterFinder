@@ -168,7 +168,12 @@ class Finder(object):
             # get data from path
             if is_path:
                 with open(data, 'r') as f:
-                    data = [next(f) for _ in range(num_samples)]
+                    data = []
+                    for _ in range(num_samples):
+                        try:
+                            data.append(next(f))
+                        except StopIteration:
+                            break
             # get data from non-path string
             else:
                 # quick check to see if `is_path` should have been used

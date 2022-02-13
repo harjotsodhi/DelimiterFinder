@@ -67,7 +67,10 @@ class TestFinder(unittest.TestCase):
 			f.find(s)
 
 	def test_read_path(self):
-		pass
+		f = Finder()
+		f.find("tests/example.txt", is_path=True, num_samples=10)
+		with self.assertRaises(FileNotFoundError):
+			f.find("tests/does_not_exist.txt", is_path=True)
 
 	def test_ignore_chars(self):
 		pass

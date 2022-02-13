@@ -51,7 +51,12 @@ class TestFinder(unittest.TestCase):
 		self.assertEqual({',': 0.5, '_': 0.5}, f.posterior)
 
 	def test_read_str(self):
-		pass
+		s = "col1,col2,col3\na,b,c\nd,e,f"
+		f = Finder()
+		f.find(s)
+		s = 123,456,789
+		with self.assertRaises(TypeError):
+			f.find(s)
 
 	def test_read_list(self):
 		s = ["col1,col2,col3","a,b,c","d,e,f"]

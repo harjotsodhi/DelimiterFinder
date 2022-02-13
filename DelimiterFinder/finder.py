@@ -122,7 +122,7 @@ class Finder(object):
         # display warning if the calculated Bayes factor for the MAP is less than 3
         if self.bayes_factor < 3:
             warnings.warn("Evidence in favor of the most likely delimiter is weak (Bayes factor = {0:.2f}). Try increasing the num_samples or adding characters to the ignore_chars list in order to obtain more conclusive results.".format(self.bayes_factor), 
-                          stacklevel=2)
+                           stacklevel=2)
         
         # get MAP estimate
         delim = h1
@@ -178,7 +178,8 @@ class Finder(object):
             else:
                 # quick check to see if `is_path` should have been used
                 if len(data) < 1000:
-                    if os.path.exists(data): warnings.warn("The given string appears to be a valid file path, yet the `is_path` parameter was set to False. Set `is_path` to True for file paths.")
+                    if os.path.exists(data): warnings.warn("The given string appears to be a valid file path, yet the `is_path` parameter was set to False. Set `is_path` to True for file paths.", 
+                                                            stacklevel=2)
 
                 data = data.split(new_line_sep, num_samples)
 

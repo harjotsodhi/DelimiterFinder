@@ -79,7 +79,11 @@ class TestFinder(unittest.TestCase):
 		self.assertNotEqual(1., f.bayes_factor)
 
 	def test_ispath(self):
-		pass
+		f = Finder()
+		with self.assertWarns(Warning):
+			f.find("tests/example.txt")
+
+		f.find("tests/does_not_exist.txt")
 
 	def test_num_samples(self):
 		pass

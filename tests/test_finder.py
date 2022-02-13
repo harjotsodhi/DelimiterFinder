@@ -86,4 +86,13 @@ class TestFinder(unittest.TestCase):
 		f.find("tests/does_not_exist.txt")
 
 	def test_num_samples(self):
-		pass
+		f = Finder()
+		for n in [1,2,3]:
+			data = gd.gen_data(num_delims=n, num_samples=50)
+			for delim in data.keys():
+				# test that posterior gets higher as sample_size increases
+				previous_posterior = 0
+				for s in [10,25,50]:
+					f.find(data[delim], num_samples=s)
+					self.assertGreater(f.posterior[delim], previous_posterior)
+					previous_posterior = f.posterior[delim]

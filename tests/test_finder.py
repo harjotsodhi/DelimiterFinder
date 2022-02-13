@@ -43,7 +43,12 @@ class TestFinder(unittest.TestCase):
 		self.assertEqual(1., f.bayes_factor)
 
 	def test_posterior(self):
-		pass
+		s = "col1,col_2,col_3\ncol1,col_2,col_3\ncol1,col_2,col_3"
+		f = Finder()
+		# suppress printing warnings here (tested earlier) 
+		warnings.filterwarnings("ignore")
+		f.find(s)
+		self.assertEqual({',': 0.5, '_': 0.5}, f.posterior)
 
 	def test_read_str(self):
 		pass

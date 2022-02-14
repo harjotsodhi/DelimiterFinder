@@ -68,7 +68,12 @@ class TestFinder(unittest.TestCase):
 
 	def test_read_path(self):
 		f = Finder()
-		f.find("tests/example.txt", is_path=True, num_samples=10)
+		d = f.find("tests/example.txt", is_path=True, num_samples=10)
+		self.assertEqual("~", d)
+		d = f.find("tests/example.csv", is_path=True, num_samples=10)
+		self.assertEqual(";", d)
+		d = f.find("tests/example.tsv", is_path=True, num_samples=10)
+		self.assertEqual("\t", d)
 		with self.assertRaises(FileNotFoundError):
 			f.find("tests/does_not_exist.txt", is_path=True)
 

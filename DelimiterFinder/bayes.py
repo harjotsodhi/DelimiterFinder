@@ -15,7 +15,7 @@ class Inference(object):
 		Attributes:
 		-----------
 		posterior: dict
-            The posterior probability of each candidate delimiter.
+	        The posterior probability of each candidate delimiter.
 		"""
 		header = data.pop(0)
 		# sequential Bayesian updating over N rows of data
@@ -66,7 +66,7 @@ class Inference(object):
 		Returns:
 		--------
 		delim: str
-            The maximum a posteriori probability (MAP) estimate.
+	        The maximum a posteriori probability (MAP) estimate.
 		"""
 		return self.hypotheses['map']['delim']
 
@@ -77,17 +77,17 @@ class Inference(object):
 		
 		Returns:
 		--------
-        bayes_factor: float
-            Evidence in favor of the most likely delimiter (MAP)
-            relative to the second most likely delimiter.
-                
-                1) bayes_factor == 1: no evidence.
-                2) 1 < bayes_factor < 3: weak evidence.
-                3) 3 < bayes_factor < 10: substantial evidence.
-                4) bayes_factor > 10: strong evidence.
-                5) bayes_factor < 1: not possible in this hypothesis test.
+	    bayes_factor: float
+	        Evidence in favor of the most likely delimiter (MAP)
+	        relative to the second most likely delimiter.
+	            
+	            1) bayes_factor == 1: no evidence.
+	            2) 1 < bayes_factor < 3: weak evidence.
+	            3) 3 < bayes_factor < 10: substantial evidence.
+	            4) bayes_factor > 10: strong evidence.
+	            5) bayes_factor < 1: not possible in this hypothesis test.
 
-                Source: Jeffreys, Harold (1998) [1961]. The Theory of Probability (3rd ed.). Oxford, England. p. 432.
+	            Source: Jeffreys, Harold (1998) [1961]. The Theory of Probability (3rd ed.). Oxford, England. p. 432.
 		"""
 		try:
 		    bayes_factor = self.hypotheses['map']['prob']/self.hypotheses['alternative']['prob']

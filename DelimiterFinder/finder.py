@@ -2,6 +2,7 @@ import os
 import re
 import warnings
 from collections import Counter
+from DelimiterFinder import bayes
 
 
 
@@ -66,7 +67,7 @@ class Finder(object):
             The maximum a posteriori probability (MAP) estimate.
         """
         data = self._format_data(data, is_path, num_samples, new_line_sep)
-        rowOne = data.pop(0)
+        rowOne = data[0]
         # create regex expression for identifying valid delimiter characters.
         alphanum, end = r"[^a-zA-Z0-9", " ]+"
         if not self.ignore_chars: self.ignore_chars = []
@@ -75,49 +76,11 @@ class Finder(object):
         matches = re.findall(re_pattern, rowOne)
         candidates = Counter(matches)
 
-        # sequential Bayesian updating over N rows of data
-        priors = {}
-        self.posterior = {}
-        total = sum(candidates.values())
-        for row in data:
-            marginal_likelihood = 0
-            for delim in candidates:
-                # initial prior is the probability of observing delimiter `m` in the rowOne
-                if delim not in priors:
-                    priors[delim] = candidates[delim]/total
-
-                # likelihood is the proportion of number of columns b/w the rowOne and row `n`
-                p0, pn = len(rowOne.split(delim)), len(row.split(delim))
-                if p0 < pn:
-                    likelihood = p0 / pn
-                else:
-                    likelihood = pn / p0
-
-                # unnormalized posterior
-                self.posterior[delim] = priors[delim]*likelihood
-                # update prior
-                priors[delim] = self.posterior[delim]
-                # we only need the marginal likelihood w.r.t the last row of data
-                marginal_likelihood += self.posterior[delim]
-
-        # keep track of the two hypotheses: h1 (MAP) and h0 (next "most likely")
-        h0, pr0 = "", 0
-        h1, pr1 = "", 0
-        # normalize the posterior by dividing by the marginal likelihood
-        for delim in self.posterior.keys():
-            self.posterior[delim] /= marginal_likelihood
-            # update h1 and h0 if a higher posterior probability is found 
-            if self.posterior[delim] > pr1:
-                h0,pr0 = h1,pr1
-                h1,pr1 = delim,self.posterior[delim]
-            elif self.posterior[delim] > pr0:
-                h0,pr0 = delim,self.posterior[delim]
-
-        # calculate the Bayes factor
-        try:
-            self.bayes_factor = pr1/pr0
-        except ZeroDivisionError:
-            self.bayes_factor = float('inf')
+        # fit the model
+        model = bayes.Inference()
+        model.fit(data, candidates)
+        self.posterior = model.posterior
+        self.bayes_factor = model.test_hypothesis()
 
         # display warning if the calculated Bayes factor for the MAP is less than 3
         if self.bayes_factor < 3:
@@ -125,7 +88,7 @@ class Finder(object):
                            stacklevel=2)
         
         # get MAP estimate
-        delim = h1
+        delim = model.predict()
         return delim
 
 

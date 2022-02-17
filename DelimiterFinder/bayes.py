@@ -7,15 +7,15 @@ class Inference(object):
 		Parameters:
 		-----------
 		data: list
-			List with each element as a row of data.
+		    List with each element as a row of data.
 		
 		candidates: dict or collections.Counter
-			Each candidate delimiter as a key and number of occurences as values.
+		    Each candidate delimiter as a key and number of occurences as values.
 
 		Attributes:
 		-----------
 		posterior: dict
-	        The posterior probability of each candidate delimiter.
+	            The posterior probability of each candidate delimiter.
 		"""
 		header = data.pop(0)
 		# sequential Bayesian updating over N rows of data
@@ -66,7 +66,7 @@ class Inference(object):
 		Returns:
 		--------
 		delim: str
-	        The maximum a posteriori probability (MAP) estimate.
+	            The maximum a posteriori probability (MAP) estimate.
 		"""
 		return self.hypotheses['map']['delim']
 
@@ -77,9 +77,9 @@ class Inference(object):
 		
 		Returns:
 		--------
-	    bayes_factor: float
-	        Evidence in favor of the most likely delimiter (MAP)
-	        relative to the second most likely delimiter.
+	    	bayes_factor: float
+		    Evidence in favor of the most likely delimiter (MAP)
+		    relative to the second most likely delimiter.
 	            
 	            1) bayes_factor == 1: no evidence.
 	            2) 1 < bayes_factor < 3: weak evidence.

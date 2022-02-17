@@ -1,12 +1,8 @@
-from collections import Counter
-
-
-
 class Inference(object):
 
 	def fit(self, data, candidates):
 		"""
-		Fit the model using equential Bayesian updating.
+		Fit the model using sequential Bayesian updating.
 
 		Parameters:
 		-----------
@@ -15,6 +11,11 @@ class Inference(object):
 		
 		candidates: dict or collections.Counter
 			Each candidate delimiter as a key and number of occurences as values.
+
+		Attributes:
+		-----------
+		posterior: dict
+            The posterior probability of each candidate delimiter.
 		"""
 		header = data.pop(0)
 		# sequential Bayesian updating over N rows of data
@@ -61,6 +62,11 @@ class Inference(object):
 	def predict(self):
 		"""
 		Return the maximum a posteriori probability (MAP) estimate.
+
+		Returns:
+		--------
+		delim: str
+            The maximum a posteriori probability (MAP) estimate.
 		"""
 		return self.hypotheses['map']['delim']
 
@@ -83,7 +89,6 @@ class Inference(object):
 
                 Source: Jeffreys, Harold (1998) [1961]. The Theory of Probability (3rd ed.). Oxford, England. p. 432.
 		"""
-		# calculate the Bayes factor
 		try:
 		    bayes_factor = self.hypotheses['map']['prob']/self.hypotheses['alternative']['prob']
 		except ZeroDivisionError:

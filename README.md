@@ -48,6 +48,8 @@ Indeed, **DelimiterFinder** can handle much more complicated data than the examp
 
 ## Bayesian Methods
 
+### Inference
+
 **DelimiterFinder** leverages Bayesian techniques to probabilistically identify unknown delimiters given data. In particular, **DelimiterFinder** fits a model using sequential Bayesian updating.
 
 The model is given as follows:
@@ -58,9 +60,36 @@ The model is given as follows:
 
 Here, theta is a finite set of candidate delimiters. Candidate delimiters are all contiguous strings of valid (i.e., not in the given `ignore_chars` list) non-alphanumeric characters in the first row of data (assumed to be the header) The prior for these candidate delimiters is given by their relative frequencies. The variable X represents a row of data. The likelihood is the proportion of the number of columns in the header and number of columns in the given row of data, assuming delimiter theta is the true delimiter. Since this is a discrete distribution with a finite number of candidates delimiters, the denominator (normalization constant) is the sum over all thetas of the likelihood times prior.
 
-The model is updated sequentially over N rows of data as follows:
+The model is updated sequentially over M rows of data as follows:
 
 <p align="center">
     <img src="https://github.com/harjotsodhi/DelimiterFinder/blob/main/eq2.png"\>
 </p>
 
+The posterior probabilities from row N are used as priors in row N+1. This is implemented sequentially for all rows 1...N...M. Finally, the maximum a posteriori probability (MAP) estimate is taken to be the delimiter.
+
+<p align="center">
+    <img src="https://github.com/harjotsodhi/DelimiterFinder/blob/main/eq3.png"\>
+</p>
+
+### Hypothesis Testing
+
+A Bayesian hypothesis test is used to evaluate the significance of the most likely delimiter. The framework for this hypothesis test is as follows: hypothesis one is that the delimiter with the highest posterior probability (MAP estimate) is the true delimiter, and hypothesis two is that the delimiter with the second highest posterior probability is the true delimiter. The more likely hypothesis one is than hypothesis two, the more confident we are with the model's choice for most likely delimiter.
+
+To conduct this hypothesis test, we will calculate the Bayes factor, which is the ratio of likelihood between the two hypotheses.
+
+<p align="center">
+    <img src="https://github.com/harjotsodhi/DelimiterFinder/blob/main/eq4.png"\>
+</p>
+
+The following rules are used to determine the significance of the results given the Bayes factor:
+
+	1.) Bayes factor = 1: no evidence.
+	2.) 1 < Bayes factor < 3: weak evidence.
+	3.) 3 < Bayes factor < 10: substantial evidence.
+	4.) Bayes factor > 10: strong evidence.
+	5.) Bayes factor < 1: not possible in this hypothesis test.
+
+	Source: Jeffreys, Harold (1998) [1961]. The Theory of Probability (3rd ed.). Oxford, England. p. 432.
+
+**DelimiterFinder** will raise a warning if the Bayes factor for the chosen delimiter is less than 3. Increasing the number of rows or adding unwanted characters to the `ignore_chars` list will generally increase the Bayes factor.

@@ -55,3 +55,12 @@ The model is given as follows:
 <p align="center">
     <img src="https://github.com/harjotsodhi/DelimiterFinder/blob/main/eq1.png"\>
 </p>
+
+Here, theta is a finite set of candidate delimiters. Candidate delimiters are all contiguous strings of valid (i.e., not in the given `ignore_chars` list) non-alphanumeric characters in the first row of data (assumed to be the header) The prior for these candidate delimiters is given by their relative frequencies. The variable X represents a row of data. The likelihood is the proportion of the number of columns in the header and number of columns in the given row of data, assuming delimiter theta is the true delimiter. Since this is a discrete distribution with a finite number of candidates delimiters, the denominator (normalization constant) is the sum over all thetas of the likelihood times prior.
+
+The model is updated sequentially over N rows of data as follows:
+
+<p align="center">
+    <img src="https://github.com/harjotsodhi/DelimiterFinder/blob/main/eq2.png"\>
+</p>
+

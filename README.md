@@ -20,8 +20,10 @@
 
 ## Installation
 
-```
+Install the latest released version from PyPI.
 
+```
+pip install DelimiterFinder
 ```
 
 ## User Guide

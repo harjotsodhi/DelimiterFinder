@@ -1,4 +1,5 @@
 # DelimiterFinder
+[![codecov](https://codecov.io/gh/harjotsodhi/DelimiterFinder/branch/main/graph/badge.svg?token=N86QL890PL)](https://codecov.io/gh/harjotsodhi/DelimiterFinder)
 
 **DelimiterFinder** is a Python package for probabilistic delimiter detection. It is a fast, efficient, and easy-to-use tool for identifying unknown delimiters within tabular data.
 

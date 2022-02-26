@@ -61,7 +61,7 @@ Indeed, **DelimiterFinder** can handle much more complicated data than the examp
 The model is given as follows:
 
 <p align="center">
-    <img src="https://github.com/harjotsodhi/DelimiterFinder/blob/main/eq1.png"\>
+    <img src="https://github.com/harjotsodhi/DelimiterFinder/raw/main/eq1.png"\>
 </p>
 
 Here, theta is a finite set of candidate delimiters. Candidate delimiters are all contiguous strings of valid (i.e., not in the given `ignore_chars` list) non-alphanumeric characters in the first row of data (assumed to be the header) The prior for these candidate delimiters is given by their relative frequencies. The variable X represents a row of data. The likelihood is the proportion of the number of columns in the header and number of columns in the given row of data, assuming delimiter theta is the true delimiter. Since this is a discrete distribution with a finite number of candidates delimiters, the denominator (normalization constant) is the sum over all thetas of the likelihood times prior.
@@ -69,13 +69,13 @@ Here, theta is a finite set of candidate delimiters. Candidate delimiters are al
 The model is updated sequentially over M rows of data as follows:
 
 <p align="center">
-    <img src="https://github.com/harjotsodhi/DelimiterFinder/blob/main/eq2.png"\>
+    <img src="https://github.com/harjotsodhi/DelimiterFinder/raw/main/eq2.png"\>
 </p>
 
 The posterior probabilities from row N are used as priors in row N+1. This is implemented sequentially for all rows 1...N...M. Finally, the maximum a posteriori probability (MAP) estimate is taken to be the delimiter.
 
 <p align="center">
-    <img src="https://github.com/harjotsodhi/DelimiterFinder/blob/main/eq3.png"\>
+    <img src="https://github.com/harjotsodhi/DelimiterFinder/raw/main/eq3.png"\>
 </p>
 
 ### Hypothesis Testing
@@ -85,7 +85,7 @@ A Bayesian hypothesis test is used to evaluate the significance of the most like
 To conduct this hypothesis test, we will calculate the Bayes factor, which is the ratio of likelihood between the two hypotheses.
 
 <p align="center">
-    <img src="https://github.com/harjotsodhi/DelimiterFinder/blob/main/eq4.png"\>
+    <img src="https://github.com/harjotsodhi/DelimiterFinder/raw/main/eq4.png"\>
 </p>
 
 The following rules are used to determine the significance of the results given the Bayes factor:

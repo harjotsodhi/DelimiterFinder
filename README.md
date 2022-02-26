@@ -30,6 +30,42 @@ pip install DelimiterFinder
 
 ## User Guide
 
+### Parameters and methods for `DelimiterFinder.finder.Finder`
+
+```python
+class DelimiterFinder.finder.Finder(ignore_chars=None)
+```
+
+| Parameter          | Type       | Default       | Description   |	
+| :------------------|:---------- |:-------------:| :-------------|
+| `ignore_chars`     |	`list.`    |	*None*        | List of non-alphanumeric characters which should not be considered candidate delimiters.
+---
+---
+| Attributes         | Type       | Description   |	
+| :------------------|:-----------| :-------------|
+| `posterior`        |	`dict`    | The posterior probability of each candidate delimiter.
+| `bayes_factor`     |	`float`   | Evidence in favor of the most likely delimiter (MAP) relative to the second most likely delimiter.
+---
+---
+**Methods:**
+
+```python
+find(data, is_path=False, num_samples=20, new_line_sep="\n")
+```
+
+| Parameter          | Type       | Default       | Description   |	
+| :------------------|:---------- |:-------------:| :-------------|
+| `data`     |	`str` or `list`    |       | The input data either as a single string with each row separated by `new_line_sep` or a list where each element is a row. Alternatively, a path to a text file (e.g., .TXT, .CSV) may be passed, in which case, the `is_path` parameter should be set to "True"
+| `is_path`     |	`bool`   |    *False*   | An indicator for whether the value passed to the `data` parameter is a file path.
+| `num_samples`     |	`int`   |   *20*    | Number of rows to sample for inference.
+| `new_line_sep`     |	`str`   |   *"\n"*    | The new line separator for the rows in the data.
+---
+---
+| Return         | Type       | Description   |	
+| :------------------|:-----------| :-------------|
+| `delim`        |	`str`    | The maximum a posteriori probability (MAP) estimate.
+
+---
 ### Example
 
 Using **DelimiterFinder** is easy. To get started, simply create an instance of the `Finder` class and pass your data to the `find` method. The example below walks through a simple implementation.
@@ -55,39 +91,6 @@ Using **DelimiterFinder** is easy. To get started, simply create an instance of 
 As we can see from the output above, the **DelimiterFinder** was able to identify an unknown three character long delimiter. The `posterior` attribute provides a dictionary with all of the tested candidates delimiters and their associated posterior probabilities. The `bayes_factor` attribute shows us that there is very strong evidence (i.e., a value greater than 10) in favor of the most likely delimiter relative to the second most likely delimiter. All with just 4 rows of data!
 
 Indeed, **DelimiterFinder** can handle much more complicated data than the example given above, with the confidence in the decision made increasing with the number of rows provided. The **DelimiterFinder** has been tested for robustness against hundreds of randomly generated test cases. These tests can be found in the [tests directory](https://github.com/harjotsodhi/DelimiterFinder/tree/main/tests) of the GitHub repo.
-
-### Parameters and methods for `DelimiterFinder.finder.Finder`
-
-```python
-class DelimiterFinder.finder.Finder(ignore_chars=None)
-```
-
-**Parameters:**
-
-| Parameter          | Type       | Default       | Description   |	
-| :------------------|:---------- |:-------------:| :-------------|
-| `ignore_chars`     |	`list`    |	*None*        | List of non-alphanumeric characters which should not be considered candidate delimiters.
-
-
-**Attributes:**
-| Attributes         | Type       | Description   |	
-| :------------------|:-----------| :-------------|
-| `posterior`        |	`dict`    | The posterior probability of each candidate delimiter.
-| `bayes_factor`     |	`float`   | Evidence in favor of the most likely delimiter (MAP) relative to the second most likely delimiter.
-
-**Methods:**
-
-```python
-find(data, is_path=False, num_samples=20, new_line_sep="\n")
-```
-
-| Parameter          | Type       | Default       | Description   |	
-| :------------------|:---------- |:-------------:| :-------------|
-| `data`     |	`str` or `list`    |       | The input data either as a single string with each row separated by `new_line_sep` or a list where each element is a row. Alternatively, a path to a text file (e.g., .TXT, .CSV) may be passed, in which case, the `is_path` parameter should be set to "True"
-| `is_path`     |	`bool`   |    *False*   | An indicator for whether the value passed to the `data` parameter is a file path.
-| `num_samples`     |	`int`   |   *20*    | Number of rows to sample for inference.
-| `new_line_sep`     |	`str`   |   *"\n"*    | The new line separator for the rows in the data.
-
 
 ## Bayesian Methods
 

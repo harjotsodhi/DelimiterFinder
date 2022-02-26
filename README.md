@@ -20,7 +20,7 @@
 
 ## Installation
 
-Install the latest released version from PyPI.
+Install the latest released version from [PyPI](https://pypi.org/project/DelimiterFinder/).
 
 ```
 pip install DelimiterFinder

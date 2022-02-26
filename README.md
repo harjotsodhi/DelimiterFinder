@@ -69,7 +69,7 @@ Using **DelimiterFinder** is easy. To get started, simply create an instance of 
 ```python
 >>> from DelimiterFinder.finder import Finder
 >>> # example data
->>> data = "c_1~|~c_2~|~c_3\n1~|~2~|~3\n4~|~~|~\n5~|~~|~6"""
+>>> data = "c_1~|~c_2~|~c_3\n1~|~2~|~3\n4~|~~|~\n5~|~~|~6"
 >>> # create instance of Finder and fit to data
 >>> delim_locator = Finder()
 >>> delim = delim_locator.find(data)

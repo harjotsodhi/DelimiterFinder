@@ -56,7 +56,7 @@ As we can see from the output above, the **DelimiterFinder** was able to identif
 
 Indeed, **DelimiterFinder** can handle much more complicated data than the example given above, with the confidence in the decision made increasing with the number of rows provided. The **DelimiterFinder** has been tested for robustness against hundreds of randomly generated test cases. These tests can be found in the [tests directory](https://github.com/harjotsodhi/DelimiterFinder/tree/main/tests) of the GitHub repo.
 
-### DelimiterFinder.finder.Finder
+### Parameters and methods for `DelimiterFinder.finder.Finder`
 
 ```python
 class DelimiterFinder.finder.Finder(ignore_chars=None)

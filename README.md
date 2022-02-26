@@ -39,14 +39,12 @@ class DelimiterFinder.finder.Finder(ignore_chars=None)
 | Parameter          | Type       | Default       | Description   |	
 | :------------------|:---------- |:-------------:| :-------------|
 | `ignore_chars`     |	`list.`    |	*None*        | List of non-alphanumeric characters which should not be considered candidate delimiters.
----
----
+
 | Attributes         | Type       | Description   |	
 | :------------------|:-----------| :-------------|
 | `posterior`        |	`dict`    | The posterior probability of each candidate delimiter.
 | `bayes_factor`     |	`float`   | Evidence in favor of the most likely delimiter (MAP) relative to the second most likely delimiter.
----
----
+
 **Methods:**
 
 ```python
@@ -59,13 +57,11 @@ find(data, is_path=False, num_samples=20, new_line_sep="\n")
 | `is_path`     |	`bool`   |    *False*   | An indicator for whether the value passed to the `data` parameter is a file path.
 | `num_samples`     |	`int`   |   *20*    | Number of rows to sample for inference.
 | `new_line_sep`     |	`str`   |   *"\n"*    | The new line separator for the rows in the data.
----
----
+
 | Return         | Type       | Description   |	
 | :------------------|:-----------| :-------------|
 | `delim`        |	`str`    | The maximum a posteriori probability (MAP) estimate.
 
----
 ### Example
 
 Using **DelimiterFinder** is easy. To get started, simply create an instance of the `Finder` class and pass your data to the `find` method. The example below walks through a simple implementation.

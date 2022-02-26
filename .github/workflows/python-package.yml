@@ -27,3 +27,9 @@ jobs:
     - name: Test with unittest
       run: |
         python -m unittest tests.test_finder
+    - name: Generate Report
+      run: |
+        pip install coverage
+        coverage run -m unittest tests.test_finder
+    - name: Upload Coverage to Codecov
+      uses: codecov/codecov-action@v1

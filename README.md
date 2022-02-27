@@ -53,7 +53,7 @@ find(data, is_path=False, num_samples=20, new_line_sep="\n")
 
 | Parameter          | Type       | Default      | Optional | Description   |	
 | :------------------|:----------:|:-------------:|:---------:|:-------------|
-| `data`     |	`str` or `list`    |       | No |The input data either as a single string with each row separated by `new_line_sep` or a list where each element is a row. Alternatively, a path to a text file (e.g., .TXT, .CSV) may be passed, in which case, the `is_path` parameter should be set to "True"
+| `data`     |	`str` or `list`    |       | No |The input data either as a single string with each row separated by `new_line_sep` or a list where each element is a row. Alternatively, a path to a text file (e.g., .TXT, .CSV) may be passed, in which case, the `is_path` parameter should be set to "True". Data should have more than one row.
 | `is_path`     |	`bool`   |    *False*   | Yes |An indicator for whether the value passed to the `data` parameter is a file path.
 | `num_samples`     |	`int`   |   *20*    | :Yes | Number of rows to sample for inference.
 | `new_line_sep`     |	`str`   |   *"\n"*    | Yes | The new line separator for the rows in the data.

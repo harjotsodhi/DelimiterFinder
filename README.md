@@ -36,36 +36,32 @@ pip install DelimiterFinder
 class DelimiterFinder.finder.Finder(ignore_chars=None)
 ```
 
-| Parameter          | Type       | Default       | Description   |	
-| :------------------|:---------- |:-------------:| :-------------|
-| `ignore_chars`     |	`list.`    |	*None*        | List of non-alphanumeric characters which should not be considered candidate delimiters.
----
----
+| Parameter          | Type       | Default      | Optional  | Description   |	
+| :------------------|:----------:|:-------------:|:---------:|:-------------|
+| `ignore_chars`     |	`list`   |	*None*   |     :white_check_mark:   |List of non-alphanumeric characters which should not be considered candidate delimiters.
+
 | Attributes         | Type       | Description   |	
-| :------------------|:-----------| :-------------|
+| :------------------|:-----------:| :-------------|
 | `posterior`        |	`dict`    | The posterior probability of each candidate delimiter.
 | `bayes_factor`     |	`float`   | Evidence in favor of the most likely delimiter (MAP) relative to the second most likely delimiter.
----
----
+
 **Methods:**
 
 ```python
 find(data, is_path=False, num_samples=20, new_line_sep="\n")
 ```
 
-| Parameter          | Type       | Default       | Description   |	
-| :------------------|:---------- |:-------------:| :-------------|
-| `data`     |	`str` or `list`    |       | The input data either as a single string with each row separated by `new_line_sep` or a list where each element is a row. Alternatively, a path to a text file (e.g., .TXT, .CSV) may be passed, in which case, the `is_path` parameter should be set to "True"
-| `is_path`     |	`bool`   |    *False*   | An indicator for whether the value passed to the `data` parameter is a file path.
-| `num_samples`     |	`int`   |   *20*    | Number of rows to sample for inference.
-| `new_line_sep`     |	`str`   |   *"\n"*    | The new line separator for the rows in the data.
----
----
+| Parameter          | Type       | Default      | Optional | Description   |	
+| :------------------|:----------:|:-------------:|:---------:|:-------------|
+| `data`     |	`str` or `list`    |       | :x: |The input data either as a single string with each row separated by `new_line_sep` or a list where each element is a row. Alternatively, a path to a text file (e.g., .TXT, .CSV) may be passed, in which case, the `is_path` parameter should be set to "True"
+| `is_path`     |	`bool`   |    *False*   | :white_check_mark: |An indicator for whether the value passed to the `data` parameter is a file path.
+| `num_samples`     |	`int`   |   *20*    | :white_check_mark: | Number of rows to sample for inference.
+| `new_line_sep`     |	`str`   |   *"\n"*    | :white_check_mark: | The new line separator for the rows in the data.
+
 | Return         | Type       | Description   |	
 | :------------------|:-----------| :-------------|
 | `delim`        |	`str`    | The maximum a posteriori probability (MAP) estimate.
 
----
 ### Example
 
 Using **DelimiterFinder** is easy. To get started, simply create an instance of the `Finder` class and pass your data to the `find` method. The example below walks through a simple implementation.
@@ -73,7 +69,7 @@ Using **DelimiterFinder** is easy. To get started, simply create an instance of 
 ```python
 >>> from DelimiterFinder.finder import Finder
 >>> # example data
->>> data = "c_1~|~c_2~|~c_3\n1~|~2~|~3\n4~|~~|~\n5~|~~|~6"""
+>>> data = "c_1~|~c_2~|~c_3\n1~|~2~|~3\n4~|~~|~\n5~|~~|~6"
 >>> # create instance of Finder and fit to data
 >>> delim_locator = Finder()
 >>> delim = delim_locator.find(data)

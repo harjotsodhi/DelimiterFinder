@@ -30,6 +30,13 @@ class TestFinder(unittest.TestCase):
 		with self.assertWarns(Warning):
 			f.find(s)
 
+	def test_onerow_warn(self):
+		s = "col1,col_2,col_3"
+		f = Finder()
+		with self.assertWarns(Warning):
+			d = f.find(s)
+		print(d)
+
 	def test_bayes_factor(self):
 		s = "col1,col2,col3\n1,2,3\n4,5,6"
 		f = Finder()
@@ -88,6 +95,8 @@ class TestFinder(unittest.TestCase):
 		with self.assertWarns(Warning):
 			f.find("tests/example.txt")
 
+		# suppress printing warnings here (tested earlier) 
+		warnings.filterwarnings("ignore")
 		f.find("tests/does_not_exist.txt")
 
 	def test_num_samples(self):

@@ -147,4 +147,7 @@ class Finder(object):
                 data = data.split(new_line_sep, num_samples)
 
         data = data[:num_samples]
+        if len(data) == 1:
+            warnings.warn("Providing only 1 row of data will result in unreliable results. Increase the number of rows provided to at least 2.", stacklevel=2)
+
         return data

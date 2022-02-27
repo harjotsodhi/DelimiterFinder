@@ -7,7 +7,7 @@ with open("README.md", "r") as f:
 
 setup(
 	name="DelimiterFinder",
-	version="0.0.2",
+	version="0.0.4",
 	author="Harjot Sodhi",
 	author_email="harjotsodhi17@gmail.com",
 	url="https://github.com/harjotsodhi/DelimiterFinder",
